@@ -1,0 +1,14 @@
+name: "."
+title: "Teague Tran"
+description: |
+  mfeo
+output_dir: "docs"
+navbar:
+  right:
+    - text: "Home"
+      href: index.html
+    - text: "About"
+      href: about.html
+    - text: "Teague Tran"
+      href: teague.html
+output: distill::distill_article

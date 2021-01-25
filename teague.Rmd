@@ -1,0 +1,17 @@
+---
+title: "Teague Tran"
+image: "teague.jpg"
+links:
+  - label: LinkedIn
+    url: "https://www.linkedin.com/in/teague-tran/"
+  - label: GitHub
+    url: "https://github.com/teaguetran"
+  - label: Email
+    url: "mailto:teaguetran@bren.ucsb.edu"
+output:
+  postcards::jolla
+---
+ 
+I am a masters student currently studying at UCSB's Bren School for Environmental Science & Management.
+I love hiking, playing (video and board) games, and I am learning to surf and play the guitar 
+(not at the same time though).
