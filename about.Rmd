@@ -1,7 +1,6 @@
 ---
-title: "About me"
-description: |
-  Professional Interests and Experience
+title: "About Me"
+  
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)

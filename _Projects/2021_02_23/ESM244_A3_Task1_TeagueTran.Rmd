@@ -1,0 +1,56 @@
+---
+title: "Analyzing Oil Spill Occurences in California by County"
+author: "Teague Tran"
+date: "2/21/2021"
+output: 
+  html_document:
+    theme: darkly
+    code_folding: hide
+---
+
+```{r setup, include=FALSE}
+#set up
+library(tidyverse)
+library(tsibble)
+library(feasts)
+library(fable)
+library(here)
+library(sf)
+library(janitor)
+library(lubridate)
+library(tmap)
+
+#read in .shp file
+ca_counties <- read_sf(here("_Projects", "2021_02_23", "data","ca_counties", "CA_Counties_TIGER2016.shp"))
+ca_subset <- ca_counties %>% 
+  select(NAME, ALAND) %>% 
+  rename(county_name = NAME, land_area = ALAND)
+ca_oilspill <- read_sf(here("_Projects", "2021_02_23", "data", "ds394.shp")) %>% 
+  clean_names()
+```
+```{r, warning = FALSE, message = FALSE}
+#Check CRS and plot info
+#ca_subset %>% st_crs()
+#ca_oilspill %>%  st_crs()
+
+#change ca_oilspill to WGS 84
+ca_oilspill <-  st_transform(ca_oilspill, 3857)
+
+#join county and oilspill data to one
+ca_county_oilspill <- ca_subset %>% 
+  st_join(ca_oilspill)
+```
+
+
+```{r,  warning = FALSE, message = FALSE}
+#counts data 
+oilspill_counts <- ca_county_oilspill %>% 
+  count(county_name)
+#map it! But is not interactive map 
+ggplot(data = oilspill_counts) +
+  geom_sf(aes(fill = n), color = "white", size = 0.1) +
+  scale_fill_gradientn(colors = c("lightgray", "blue", "navy"))+
+  theme_minimal() +
+  labs(fill = "Number of oil spill incidents", title = "2008 California Oil Spill County Heat Map") 
+```
+

@@ -1,0 +1,59 @@
+---
+title: "Heat Map of California Oil Spills"
+description: |
+  I determined the counties with the most oil spills using the California Department of Fish and Wildlife 2008 Oil Spill Incident Tracking and county maps from the Census Bureau.
+code_folding: hide
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+#set up
+library(tidyverse)
+library(tsibble)
+library(feasts)
+library(fable)
+library(here)
+library(sf)
+library(janitor)
+library(lubridate)
+library(tmap)
+
+#read in .shp file
+ca_counties <- read_sf(here( "_posts","2021-02-24-heat-map-of-california-oil-spills", "data","ca_counties", "CA_Counties_TIGER2016.shp"))
+ca_subset <- ca_counties %>% 
+  select(NAME, ALAND) %>% 
+  rename(county_name = NAME, land_area = ALAND)
+ca_oilspill <- read_sf(here("_posts","2021-02-24-heat-map-of-california-oil-spills", "data", "ds394.shp")) %>% 
+  clean_names()
+
+#Check CRS and plot info
+#ca_subset %>% st_crs()
+#ca_oilspill %>%  st_crs()
+
+#change ca_oilspill to WGS 84
+ca_oilspill <-  st_transform(ca_oilspill, 3857)
+
+#join county and oilspill data to one
+ca_county_oilspill <- ca_subset %>% 
+  st_join(ca_oilspill)
+```
+
+```{r,  warning = FALSE, message = FALSE}
+#counts data 
+oilspill_counts <- ca_county_oilspill %>% 
+  count(county_name)
+#map it! But is not interactive map 
+ggplot(data = oilspill_counts) +
+  geom_sf(aes(fill = n), color = "white", size = 0.1) +
+  scale_fill_gradientn(colors = c("lightgray", "blue", "navy"))+
+  theme_minimal() +
+  labs(fill = "Number of oil spill incidents", title = "2008 California Oil Spill County Heat Map") 
+```
+
+
+
+
