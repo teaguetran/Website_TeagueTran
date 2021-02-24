@@ -20,7 +20,7 @@ library(here)
 library(sf)
 library(janitor)
 library(lubridate)
-library(tmap)
+
 
 #read in .shp file
 ca_counties <- read_sf(here( "_posts","2021-02-24-heat-map-of-california-oil-spills", "data","ca_counties", "CA_Counties_TIGER2016.shp"))
