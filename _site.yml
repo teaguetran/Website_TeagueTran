@@ -12,6 +12,8 @@ navbar:
       href: about.html
     - text: "Portfolio/Coding Blog"
       href: blog.html
+    - text: "Resume"
+      href: resume.html
 collections: 
   posts: 
     feed_items_max: 50

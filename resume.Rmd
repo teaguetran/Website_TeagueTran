@@ -1,0 +1,13 @@
+---
+title: "Resume"
+---
+```{r, include = FALSE}
+library(knitr)
+library(tidyverse)
+library(here)
+```
+
+
+```{r echo = FALSE, message=FALSE, fig.align='center', fig.pos='H', out.width = "800px", out.height = "1100px"}
+knitr::include_graphics(here("Resume_shiny.pdf"))
+```
