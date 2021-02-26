@@ -1,7 +1,7 @@
 ---
 title: "Resume"
 ---
-```{r, include = FALSE}
+```{r, include = FALSE, message=FALSE}
 library(knitr)
 library(tidyverse)
 library(here)
