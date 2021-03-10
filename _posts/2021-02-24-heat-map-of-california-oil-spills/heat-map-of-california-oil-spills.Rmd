@@ -5,11 +5,12 @@ description: |
 code_folding: hide
 output:
   distill::distill_article:
+    code_folding: true
     self_contained: false
 ---
 
 
-```{r setup, include=FALSE}
+```{r setup, eval = FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 #set up
 library(tidyverse)
@@ -42,7 +43,7 @@ ca_county_oilspill <- ca_subset %>%
   st_join(ca_oilspill)
 ```
 
-```{r,  warning = FALSE, message = FALSE}
+```{r,  warning = FALSE, message = FALSE, eval= FALSE}
 #counts data 
 oilspill_counts <- ca_county_oilspill %>% 
   count(county_name)
@@ -54,6 +55,6 @@ ggplot(data = oilspill_counts) +
   labs(fill = "Number of oil spill incidents", title = "2008 California Oil Spill County Heat Map") 
 ```
 
-
+![](./myplot)
 
 

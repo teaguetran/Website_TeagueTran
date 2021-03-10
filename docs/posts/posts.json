@@ -4,11 +4,11 @@
     "title": "Heat Map of California Oil Spills",
     "description": "I determined the counties with the most oil spills using the California Department of Fish and Wildlife 2008 Oil Spill Incident Tracking and county maps from the Census Bureau.",
     "author": [],
-    "date": "2021-02-24",
+    "date": "2021-03-09",
     "categories": [],
-    "contents": "\r\n\r\n\r\n\r\n\r\n\r\n\r\n",
+    "contents": "\r\n\r\nShow code\r\n#counts data \r\noilspill_counts <- ca_county_oilspill %>% \r\n  count(county_name)\r\n#map it! But is not interactive map \r\nggplot(data = oilspill_counts) +\r\n  geom_sf(aes(fill = n), color = \"white\", size = 0.1) +\r\n  scale_fill_gradientn(colors = c(\"lightgray\", \"blue\", \"navy\"))+\r\n  theme_minimal() +\r\n  labs(fill = \"Number of oil spill incidents\", title = \"2008 California Oil Spill County Heat Map\") \r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n",
     "preview": "posts/2021-02-24-heat-map-of-california-oil-spills/heat-map-of-california-oil-spills_files/figure-html5/unnamed-chunk-1-1.png",
-    "last_modified": "2021-02-24T06:38:52-08:00",
-    "input_file": {}
+    "last_modified": "2021-03-09T19:56:18-08:00",
+    "input_file": "heat-map-of-california-oil-spills.utf8.md"
   }
 ]
