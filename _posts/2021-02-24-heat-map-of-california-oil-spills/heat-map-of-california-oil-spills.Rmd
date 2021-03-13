@@ -55,6 +55,6 @@ ggplot(data = oilspill_counts) +
   labs(fill = "Number of oil spill incidents", title = "2008 California Oil Spill County Heat Map") 
 ```
 
-![](./myplot)
+
 
 

@@ -1,5 +1,17 @@
 [
   {
+    "path": "posts/2021-03-09-lotr/",
+    "title": "Wordcloud of The Two Towers by J.R.R.",
+    "description": "I took a pdf of The Two Towers by J.R.R. Tolken, found the top 100 words used, excluding common words such as \"the\" or \"a\", and visualized it in a wordcloud. I also added Smeagol in the background because he is adorable when he's not Gollum.",
+    "author": [],
+    "date": "2021-03-12",
+    "categories": [],
+    "contents": "\r\n\r\nShow code\r\n#put text into tidy data frame with each individual line having its own line in the data frame\r\n\r\nTT_tidy <- data.frame(TT_text) %>% \r\n  mutate(text_full = str_split(TT_text, pattern = \"\\\\n\")) %>% \r\n  unnest(text_full) %>% \r\n  mutate(text_full = str_trim(text_full))\r\n\r\n# start at chapter 1 and start identifying chapters within books \r\n\r\nTT_df <- TT_tidy %>% \r\n  slice(- (1:9)) %>% \r\n  mutate(chapter = case_when(\r\n    str_detect(text_full, pattern = \"Chapter\") ~ text_full,\r\n    TRUE ~ NA_character_\r\n  )) %>% \r\n  fill(chapter) %>% \r\n  separate(col = chapter, into = c(\"chap\", \"num\"), sep = \" \") %>% \r\n  mutate(Chapter = as.numeric(num))\r\n\r\n#get every word into its own row\r\nTT_tokens <- TT_df %>% \r\n  unnest_tokens(word, text_full) %>% \r\n  dplyr::select(-TT_text)\r\n\r\nTT_nonstop_words <- TT_tokens %>% \r\n  anti_join(stop_words)\r\n\r\n# ^^ with stop words\r\n# remove all stop words in all of the books\r\nnonstop_counts_TT <- TT_nonstop_words %>% \r\n  count(Chapter, word)\r\n\r\n\r\n#take top 5 words per chapter for TT\r\nTT_top5 <- nonstop_counts_TT %>% \r\n  group_by(Chapter) %>% \r\n  arrange (-n) %>% \r\n  slice(1:5)\r\n\r\n\r\n\r\n\r\nShow code\r\n# get counts for whole book of TT\r\nTT_book_counts <- TT_nonstop_words %>% \r\n  count(word)\r\n#get top 100 words from TT\r\nTT_top100 <- TT_book_counts %>% \r\n  arrange (-n) %>% \r\n  slice(1:100)\r\n\r\n#word cloud for whole TT book\r\nTT_cloud <- ggplot (data = TT_top100, aes(label = word)) +\r\n  background_image(smeagol_pic) +\r\n  geom_text_wordcloud(aes(color = n, size = n)) +\r\n  scale_size_area(max_size = 13) +\r\n  scale_color_gradientn(colors = c(\"coral\", \"brown3\", \"firebrick4\")) +\r\n  theme_minimal() +\r\n  labs(title = \"Top 100 words used in The Two Towers\")\r\n\r\nTT_cloud\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n",
+    "preview": "posts/2021-03-09-lotr/lotr_files/figure-html5/unnamed-chunk-2-1.png",
+    "last_modified": "2021-03-12T14:51:09-08:00",
+    "input_file": "lotr.utf8.md"
+  },
+  {
     "path": "posts/2021-02-24-heat-map-of-california-oil-spills/",
     "title": "Heat Map of California Oil Spills",
     "description": "I determined the counties with the most oil spills using the California Department of Fish and Wildlife 2008 Oil Spill Incident Tracking and county maps from the Census Bureau.",
@@ -9,6 +21,6 @@
     "contents": "\r\n\r\nShow code\r\n#counts data \r\noilspill_counts <- ca_county_oilspill %>% \r\n  count(county_name)\r\n#map it! But is not interactive map \r\nggplot(data = oilspill_counts) +\r\n  geom_sf(aes(fill = n), color = \"white\", size = 0.1) +\r\n  scale_fill_gradientn(colors = c(\"lightgray\", \"blue\", \"navy\"))+\r\n  theme_minimal() +\r\n  labs(fill = \"Number of oil spill incidents\", title = \"2008 California Oil Spill County Heat Map\") \r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n",
     "preview": "posts/2021-02-24-heat-map-of-california-oil-spills/heat-map-of-california-oil-spills_files/figure-html5/unnamed-chunk-1-1.png",
     "last_modified": "2021-03-09T19:56:18-08:00",
-    "input_file": "heat-map-of-california-oil-spills.utf8.md"
+    "input_file": {}
   }
 ]

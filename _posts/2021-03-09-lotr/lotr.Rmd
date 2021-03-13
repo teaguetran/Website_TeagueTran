@@ -1,21 +1,94 @@
 ---
-title: "LOTR"
+title: "Wordcloud of The Two Towers by J.R.R."
 description: |
-  A short description of the post.
-author: []
-date: 03-09-2021
+  I took a pdf of The Two Towers by J.R.R. Tolken, found the top 100 words used, excluding common words such as "the" or "a", and visualized it in a wordcloud. I also added Smeagol in the background because he is adorable when he's not Gollum.  
 output:
   distill::distill_article:
+    code_folding: true
     self_contained: false
 ---
 
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(tidytext)
+library(textdata)
+library(pdftools)
+library(ggwordcloud)
+library(here)
+library(patchwork)
+library(ggpubr)
+library(jpeg)
+
+#enter The Fellowship of the Ring.pdf into text
+
+TT_text <- pdf_text(here("_posts", "2021-03-09-lotr", "data", "LoR_TwoTowers.pdf"))
+
+#load picture of Gollum
+smeagol_pic <- readJPEG(here("_posts", "2021-03-09-lotr", "data", "TT_pic.jpg"))
+
 ```
 
-Distill is a publication format for scientific and technical writing, native to the web.
+```{r, warning = FALSE, message = FALSE}
+#put text into tidy data frame with each individual line having its own line in the data frame
 
-Learn more about using Distill at <https://rstudio.github.io/distill>.
+TT_tidy <- data.frame(TT_text) %>% 
+  mutate(text_full = str_split(TT_text, pattern = "\\n")) %>% 
+  unnest(text_full) %>% 
+  mutate(text_full = str_trim(text_full))
+
+# start at chapter 1 and start identifying chapters within books 
+
+TT_df <- TT_tidy %>% 
+  slice(- (1:9)) %>% 
+  mutate(chapter = case_when(
+    str_detect(text_full, pattern = "Chapter") ~ text_full,
+    TRUE ~ NA_character_
+  )) %>% 
+  fill(chapter) %>% 
+  separate(col = chapter, into = c("chap", "num"), sep = " ") %>% 
+  mutate(Chapter = as.numeric(num))
+
+#get every word into its own row
+TT_tokens <- TT_df %>% 
+  unnest_tokens(word, text_full) %>% 
+  dplyr::select(-TT_text)
+
+TT_nonstop_words <- TT_tokens %>% 
+  anti_join(stop_words)
+
+# ^^ with stop words
+# remove all stop words in all of the books
+nonstop_counts_TT <- TT_nonstop_words %>% 
+  count(Chapter, word)
 
 
+#take top 5 words per chapter for TT
+TT_top5 <- nonstop_counts_TT %>% 
+  group_by(Chapter) %>% 
+  arrange (-n) %>% 
+  slice(1:5)
+```
+```{r, warning = FALSE, message = FALSE}
+
+# get counts for whole book of TT
+TT_book_counts <- TT_nonstop_words %>% 
+  count(word)
+#get top 100 words from TT
+TT_top100 <- TT_book_counts %>% 
+  arrange (-n) %>% 
+  slice(1:100)
+
+#word cloud for whole TT book
+TT_cloud <- ggplot (data = TT_top100, aes(label = word)) +
+  background_image(smeagol_pic) +
+  geom_text_wordcloud(aes(color = n, size = n)) +
+  scale_size_area(max_size = 13) +
+  scale_color_gradientn(colors = c("coral", "brown3", "firebrick4")) +
+  theme_minimal() +
+  labs(title = "Top 100 words used in The Two Towers")
+
+TT_cloud
+```
