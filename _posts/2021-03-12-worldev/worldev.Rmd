@@ -1,0 +1,79 @@
+---
+title: "world_ev"
+description: |
+  This short study is to determine if there are relationships between the world's tree canopy cover, mean annual temperature, cloudiness, and cropland cover. The data used in this study provided by [@zander_venter](https://www.kaggle.com/zanderventer/datasets) on Kaggle, who acquired the data through [Google Earth Engine](https://earthengine.google.com/). Mean values for 243 countries were calculated at a reduction scale of 10 km. To determine the relationships between the variables, we performed a principal components analysis and displayed the information on a biplot, where the two principle components visualized accounted for 77% of the variance in the dat
+output:
+  distill::distill_article:
+    code_folding: true
+    self_contained: false
+---
+
+
+```{r,echo = TRUE, message = FALSE, warning = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+#Set up section
+library(tidyverse)
+library(janitor)
+library(palmerpenguins)
+library(here)
+
+#for PCA
+library(ggfortify)
+
+#For ggplot customization
+library(readxl)
+library(gghighlight)
+library(lubridate)
+library(plotly)
+
+#to make compound figures 
+library(patchwork)
+
+#read in .csv file
+world_env_vars <- read_csv(here("_posts", "2021-03-12-worldev", "data", "world_env_vars.csv"))
+```
+
+
+```{r,echo = TRUE, message = FALSE, warning = FALSE}
+#Task 2 
+#create new columns with better variable names to make the graph more professional 
+world_env_vars <- world_env_vars %>% 
+  mutate("Cropland Cover" = cropland_cover, 
+         "Tree Canopy Cover" = tree_canopy_cover,
+         "Mean Annual Temperature" = temp_mean_annual,
+         "Cloudiness" = cloudiness)
+#select variables that I want to include in my PCA biplot
+env_vars_PCA <- world_env_vars %>%
+  select("Cropland Cover", "Tree Canopy Cover", "Mean Annual Temperature", "Cloudiness") %>% 
+  drop_na() %>% 
+  scale() %>% #allows us to compare variables evenly
+  prcomp() #run PCA on data
+
+#needed to create PCA biplot
+env_vars_complete <- world_env_vars %>% 
+  drop_na("Cropland Cover", "Tree Canopy Cover", "Mean Annual Temperature", "Cloudiness")
+#create pca biplot
+autoplot(env_vars_PCA,
+         data = env_vars_complete, 
+         colour = 'black',
+         loadings = TRUE,
+         loadings.label = TRUE) + 
+  theme_minimal() +
+  labs(title = "Relationship between different envrionmental variables in the world")
+```
+
+Figure 1. Mean annual temperature, tree canopy cover, cloudiness, and cropland cover of different countries (each point represents a country) are plotted. 
+
+### Summary:
+
+- The principal components in this biplot capture approximately 77% of variance found in the data (PC1 = 42.91% and PC2 = 34.82%)
+- Mean annual temperature has a strong negative correlation with cropland cover
+- Both mean annual temperature and cropland cover have little to no correlation with either tree canopy cover or cloudiness
+- Tree canopy cover has a positive correlation with cloudiness
+
+### Citation:
+zander_venter. “Environmental Variables for World Countries.” Kaggle.com, 2018, [www.kaggle.com/zanderventer/environmental-variables-for-world-countries](www.kaggle.com/zanderventer/environmental-variables-for-world-countries). Accessed 24 Jan. 2021.
+
+
+
