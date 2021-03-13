@@ -10,13 +10,10 @@ output:
 ---
 
 
-```{r setup, eval = FALSE}
+```{r setup}
 knitr::opts_chunk$set(echo = FALSE)
 #set up
 library(tidyverse)
-library(tsibble)
-library(feasts)
-library(fable)
 library(here)
 library(sf)
 library(janitor)
@@ -43,7 +40,7 @@ ca_county_oilspill <- ca_subset %>%
   st_join(ca_oilspill)
 ```
 
-```{r,  warning = FALSE, message = FALSE, eval= FALSE}
+```{r,  warning = FALSE, message = FALSE}
 #counts data 
 oilspill_counts <- ca_county_oilspill %>% 
   count(county_name)
@@ -56,5 +53,14 @@ ggplot(data = oilspill_counts) +
 ```
 
 
+## Summary: 
+
+This project was my first introduction to R's geospatial capabilities. 2008 oil spill data from the California Department of Fish and Wildlife was mapped onto county outlines provided by the US Census Bureau. The coordinate reference system for both was WGS 84. Using the data provided and the package "sf", I found the counties with the most incidents in California and visualized it. It was a great learning experience to get data from different sources and visualize it on my own. 
+
+## Citations: 
+
+California Department of Fish and Wildlife. (2009). Oil Spill Incident Tracking [ds394]. OSPR Incident Tracking Database System. [https://map.dfg.ca.gov/metadata/ds0394.html#ID0EUGA](https://map.dfg.ca.gov/metadata/ds0394.html#ID0EUGA)
+
+US Census Bureau, Department of Commerce. (2016). TIGER/Line Shapefile, 2016, state, California, Current County Subdivision State-based. Data.gov. [https://catalog.data.gov/dataset/tiger-line-shapefile-2016-state-california-current-county-subdivision-state-based](https://catalog.data.gov/dataset/tiger-line-shapefile-2016-state-california-current-county-subdivision-state-based)
 
 

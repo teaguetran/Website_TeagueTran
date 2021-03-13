@@ -86,9 +86,17 @@ TT_cloud <- ggplot (data = TT_top100, aes(label = word)) +
   background_image(smeagol_pic) +
   geom_text_wordcloud(aes(color = n, size = n)) +
   scale_size_area(max_size = 13) +
-  scale_color_gradientn(colors = c("coral", "brown3", "firebrick4")) +
+  scale_color_gradientn(colors = c("coral", "firebrick2", "firebrick3")) +
   theme_minimal() +
   labs(title = "Top 100 words used in The Two Towers")
 
 TT_cloud
 ```
+
+## Summary
+I took a .pdf copy of The Two Towers, by J.R.R. Tolken, and used a wordcloud to determine which words were most spoken in the book. I was amazed that I was able to take a .pdf file and convert it into a data frame that I could manipulate. The smaller, lighter colors represent words that are less used and the bigger, darker colors represent more common words. Who would have known the main character's name is the most common! 
+
+## Citations:
+
+Tolkien, J. R. R. (2005). The two towers. HarperCollins. source: [http://old.ahmadtea.ua/userfiles/files/Tolkien/Lord%20Of%20The%20Rings%20-%20Part%202%20-%20The%20Two%20Towers%20By%20J%20R%20R%20Tolkien.pdf](http://old.ahmadtea.ua/userfiles/files/Tolkien/Lord%20Of%20The%20Rings%20-%20Part%202%20-%20The%20Two%20Towers%20By%20J%20R%20R%20Tolkien.pdf)
+

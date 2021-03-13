@@ -92,8 +92,8 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   
   
   <!--  https://schema.org/Article -->
-  <meta property="article:published" itemprop="datePublished" content="2021-03-09"/>
-  <meta property="article:created" itemprop="dateCreated" content="2021-03-09"/>
+  <meta property="article:published" itemprop="datePublished" content="2021-03-13"/>
+  <meta property="article:created" itemprop="dateCreated" content="2021-03-13"/>
   
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
   <meta property="og:title" content="Heat Map of California Oil Spills"/>
@@ -110,7 +110,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","code_folding","output","date"]}},"value":[{"type":"character","attributes":{},"value":["Heat Map of California Oil Spills"]},{"type":"character","attributes":{},"value":["I determined the counties with the most oil spills using the California Department of Fish and Wildlife 2008 Oil Spill Incident Tracking and county maps from the Census Bureau.\n"]},{"type":"character","attributes":{},"value":["hide"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["code_folding","self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[true]},{"type":"logical","attributes":{},"value":[false]}]}]},{"type":"character","attributes":{},"value":["03-09-2021"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","code_folding","output","date"]}},"value":[{"type":"character","attributes":{},"value":["Heat Map of California Oil Spills"]},{"type":"character","attributes":{},"value":["I determined the counties with the most oil spills using the California Department of Fish and Wildlife 2008 Oil Spill Incident Tracking and county maps from the Census Bureau.\n"]},{"type":"character","attributes":{},"value":["hide"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["code_folding","self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[true]},{"type":"logical","attributes":{},"value":[false]}]}]},{"type":"character","attributes":{},"value":["03-13-2021"]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   
@@ -1453,7 +1453,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Heat Map of California Oil Spills","description":"I determined the counties with the most oil spills using the California Department of Fish and Wildlife 2008 Oil Spill Incident Tracking and county maps from the Census Bureau.","authors":[],"publishedDate":"2021-03-09T00:00:00.000-08:00"}
+{"title":"Heat Map of California Oil Spills","description":"I determined the counties with the most oil spills using the California Department of Fish and Wildlife 2008 Oil Spill Incident Tracking and county maps from the Census Bureau.","authors":[],"publishedDate":"2021-03-13T00:00:00.000-08:00"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -1475,6 +1475,44 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <details>
 <summary>Show code</summary>
 <div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>knitr</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/pkg/knitr/man/opts_chunk.html'>opts_chunk</a></span><span class='op'>$</span><span class='fu'>set</span><span class='op'>(</span>echo <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+<span class='co'>#set up</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tsibble.tidyverts.org'>tsibble</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://feasts.tidyverts.org/'>feasts</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://fable.tidyverts.org'>fable</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://here.r-lib.org/'>here</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://r-spatial.github.io/sf/'>sf</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/sfirke/janitor'>janitor</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://lubridate.tidyverse.org'>lubridate</a></span><span class='op'>)</span>
+
+
+<span class='co'>#read in .shp file</span>
+<span class='va'>ca_counties</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://r-spatial.github.io/sf/reference/st_read.html'>read_sf</a></span><span class='op'>(</span><span class='fu'><a href='https://here.r-lib.org//reference/here.html'>here</a></span><span class='op'>(</span> <span class='st'>"_posts"</span>,<span class='st'>"2021-02-24-heat-map-of-california-oil-spills"</span>, <span class='st'>"data"</span>,<span class='st'>"ca_counties"</span>, <span class='st'>"CA_Counties_TIGER2016.shp"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>ca_subset</span> <span class='op'>&lt;-</span> <span class='va'>ca_counties</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>select</span><span class='op'>(</span><span class='va'>NAME</span>, <span class='va'>ALAND</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>rename</span><span class='op'>(</span>county_name <span class='op'>=</span> <span class='va'>NAME</span>, land_area <span class='op'>=</span> <span class='va'>ALAND</span><span class='op'>)</span>
+<span class='va'>ca_oilspill</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://r-spatial.github.io/sf/reference/st_read.html'>read_sf</a></span><span class='op'>(</span><span class='fu'><a href='https://here.r-lib.org//reference/here.html'>here</a></span><span class='op'>(</span><span class='st'>"_posts"</span>,<span class='st'>"2021-02-24-heat-map-of-california-oil-spills"</span>, <span class='st'>"data"</span>, <span class='st'>"ds394.shp"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rdrr.io/pkg/janitor/man/clean_names.html'>clean_names</a></span><span class='op'>(</span><span class='op'>)</span>
+
+<span class='co'>#Check CRS and plot info</span>
+<span class='co'>#ca_subset %&gt;% st_crs()</span>
+<span class='co'>#ca_oilspill %&gt;%  st_crs()</span>
+
+<span class='co'>#change ca_oilspill to WGS 84</span>
+<span class='va'>ca_oilspill</span> <span class='op'>&lt;-</span>  <span class='fu'><a href='https://r-spatial.github.io/sf/reference/st_transform.html'>st_transform</a></span><span class='op'>(</span><span class='va'>ca_oilspill</span>, <span class='fl'>3857</span><span class='op'>)</span>
+
+<span class='co'>#join county and oilspill data to one</span>
+<span class='va'>ca_county_oilspill</span> <span class='op'>&lt;-</span> <span class='va'>ca_subset</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://r-spatial.github.io/sf/reference/st_join.html'>st_join</a></span><span class='op'>(</span><span class='va'>ca_oilspill</span><span class='op'>)</span>
+</code></pre>
+</div>
+</details>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<details>
+<summary>Show code</summary>
+<div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='co'>#counts data </span>
 <span class='va'>oilspill_counts</span> <span class='op'>&lt;-</span> <span class='va'>ca_county_oilspill</span> <span class='op'>%&gt;%</span> 
   <span class='fu'>count</span><span class='op'>(</span><span class='va'>county_name</span><span class='op'>)</span>
@@ -1489,6 +1527,11 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </details>
 <p><img src="heat-map-of-california-oil-spills_files/figure-html5/unnamed-chunk-1-1.png" width="624" /></p>
 </div>
+<h2 id="summary">Summary:</h2>
+<p>This project was my first introduction to R’s geospatial capabilities. 2008 oil spill data from the California Department of Fish and Wildlife was mapped onto county outlines provided by the US Census Bureau. The coordinate reference system for both was WGS 84. Using the data provided, I found the counties with the most incidents in California and visualized it. It was a great learning experience to get data from different sources and visualize it on my own.</p>
+<h2 id="citations">Citations:</h2>
+<p>California Department of Fish and Wildlife. (2009). Oil Spill Incident Tracking [ds394]. OSPR Incident Tracking Database System. <a href="https://map.dfg.ca.gov/metadata/ds0394.html#ID0EUGA">https://map.dfg.ca.gov/metadata/ds0394.html#ID0EUGA</a></p>
+<p>US Census Bureau, Department of Commerce. (2016). TIGER/Line Shapefile, 2016, state, California, Current County Subdivision State-based. Data.gov. <a href="https://catalog.data.gov/dataset/tiger-line-shapefile-2016-state-california-current-county-subdivision-state-based">https://catalog.data.gov/dataset/tiger-line-shapefile-2016-state-california-current-county-subdivision-state-based</a></p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
