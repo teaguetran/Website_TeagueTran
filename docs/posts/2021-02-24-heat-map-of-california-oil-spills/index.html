@@ -2410,9 +2410,6 @@ d-appendix d-footnote-list a.footnote-backlink {
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>knitr</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/pkg/knitr/man/opts_chunk.html'>opts_chunk</a></span><span class='op'>$</span><span class='fu'>set</span><span class='op'>(</span>echo <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 <span class='co'>#set up</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tsibble.tidyverts.org'>tsibble</a></span><span class='op'>)</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://feasts.tidyverts.org/'>feasts</a></span><span class='op'>)</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://fable.tidyverts.org'>fable</a></span><span class='op'>)</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://here.r-lib.org/'>here</a></span><span class='op'>)</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://r-spatial.github.io/sf/'>sf</a></span><span class='op'>)</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/sfirke/janitor'>janitor</a></span><span class='op'>)</span>
@@ -2460,7 +2457,7 @@ d-appendix d-footnote-list a.footnote-backlink {
 <p><img src="heat-map-of-california-oil-spills_files/figure-html5/unnamed-chunk-1-1.png" width="624" /></p>
 </div>
 <h2 id="summary">Summary:</h2>
-<p>This project was my first introduction to R’s geospatial capabilities. 2008 oil spill data from the California Department of Fish and Wildlife was mapped onto county outlines provided by the US Census Bureau. The coordinate reference system for both was WGS 84. Using the data provided, I found the counties with the most incidents in California and visualized it. It was a great learning experience to get data from different sources and visualize it on my own.</p>
+<p>This project was my first introduction to R’s geospatial capabilities. 2008 oil spill data from the California Department of Fish and Wildlife was mapped onto county outlines provided by the US Census Bureau. The coordinate reference system for both was WGS 84. Using the data provided and the package “sf”, I found the counties with the most incidents in California and visualized it. It was a great learning experience to get data from different sources and visualize it on my own.</p>
 <h2 id="citations">Citations:</h2>
 <p>California Department of Fish and Wildlife. (2009). Oil Spill Incident Tracking [ds394]. OSPR Incident Tracking Database System. <a href="https://map.dfg.ca.gov/metadata/ds0394.html#ID0EUGA">https://map.dfg.ca.gov/metadata/ds0394.html#ID0EUGA</a></p>
 <p>US Census Bureau, Department of Commerce. (2016). TIGER/Line Shapefile, 2016, state, California, Current County Subdivision State-based. Data.gov. <a href="https://catalog.data.gov/dataset/tiger-line-shapefile-2016-state-california-current-county-subdivision-state-based">https://catalog.data.gov/dataset/tiger-line-shapefile-2016-state-california-current-county-subdivision-state-based</a></p>

@@ -64,4 +64,8 @@ mono_lake_plot
 
 Mono Lake water levels started drastically decreasing after the Los Angeles Department of Water and Power (DWP) started diverting water in 1941. When the water level reaches 6377 ft (above sea level), land bridges begin to form between the mainland and islands (gold line), allowing predators to access major bird nesting sites. If water levels fall to a lake level of 6360 ft (grey line), the salinity of the water becomes so high that brine shrimp populations decrease; this decrease would begin affecting bird species (e.g. eared grebe and California gulls) that rely on them. However, in 1994, the State Water Board set a lake level of 6392 feet, required permanent streamflows for Mono Basin streams, and ordered DWP to restore streams. I used the annotate(), geom_label(), and geom_hline to customize the figure and display more information about the actual and predicted effects of decreased water levels.
 
+## Citation
+
+Mono Basin Clearinghouse. (2020). Mono basin Clearinghouse: Building a digital library for better resource management. Retrieved December 12, 2020, from https://www.monobasinresearch.org/
+
 
