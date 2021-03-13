@@ -1,0 +1,64 @@
+---
+title: "Water Levels in Mono Lake from 1850 - 2017"
+description: |
+  Here we take a look at the lake levels of Monolake from 1850 to 2017. Due to major changes by the Los Angeles Department of Water and Power, lake levels drastically decreased, which led to land bridge formations and increased water salinity.
+output:
+  distill::distill_article:
+    code_folding: true
+    self_contained: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(here)
+library(janitor)
+library(broom)
+library(GGally)
+library(stargazer)
+library(effsize)
+library(scales)
+
+#read in mono_lake_annual_levels.csv file 
+lake_level <- read.csv(here("_posts", "2021-03-12-monolake", "data", "mono_lake_annual_levels.csv"))
+
+#tidy the data so we can use it 
+#select rows 6-173 because rows 1-4 cannot be data wrangled
+lake_level_more_tidy <-lake_level[c(6:173), ]
+
+#create set column name to these
+names(lake_level_more_tidy) <- c("year", "lake_level_asl", "stable_level", "volume_acreft", "surface_area_acres", "vertical_change")
+```
+```{r, warning = FALSE, message = FALSE, echo = FALSE}
+#select data to use in figure
+
+lake_levels_fig <- lake_level_more_tidy %>% 
+  select("year", "lake_level_asl","stable_level") 
+  #make new data that includes data as numeric rather than characters
+  
+lake_levels_fig <- lake_levels_fig %>% 
+  mutate(lake_levels_num = as.numeric(lake_levels_fig$lake_level_asl)) %>%
+  mutate(year_new = as.numeric(lake_levels_fig$year))
+
+#create figure using lake_levels_fig
+mono_lake_plot <- 
+  ggplot(data = lake_levels_fig, aes(x = year_new, y = lake_levels_num)) + 
+  scale_y_continuous(breaks = pretty_breaks(n=6)) +
+  coord_cartesian(ylim = c(6340, 6430))+
+  geom_line(size = 1.2, color = "darkgreen") +
+  labs(y = "Lake Level (ft above sea level)", x = "Year", title = "Mono Lake Water Levels (1850-2017)") +
+  annotate(geom = "point", x = 1994, y = 6374.6, shape = 16, size = 2, color = "red") +
+  annotate(geom = "point", x = 1941, y = 6417, shape = 16, size = 2, color = "red") +
+  geom_label(label = "1994: State Waterboard Decision 1631", x = 1970, y = 6368, color = "black", size = 2.175) +
+  geom_label(label = "1941: Los Angeles Department of Water & Power (DWP)", x = 1980, y = 6423, color = "black", size = 2.175) + geom_label(label = "Decrease in availability of brine shrimp", x = 1868, y = 6356, color = "black", size = 2.175)+
+  geom_label(label = "Land bridge forms", x = 1855, y = 6373, color = "black", size = 2.175)+
+  geom_hline(aes(yintercept=6360), color = "lightcyan4", size = 1) +
+  geom_hline(aes(yintercept=6377), color = "goldenrod3", size = 1) + 
+  theme_minimal()
+
+mono_lake_plot
+```
+
+Mono Lake water levels started drastically decreasing after the Los Angeles Department of Water and Power (DWP) started diverting water in 1941. When the water level reaches 6377 ft (above sea level), land bridges begin to form between the mainland and islands (gold line), allowing predators to access major bird nesting sites. If water levels fall to a lake level of 6360 ft (grey line), the salinity of the water becomes so high that brine shrimp populations decrease; this decrease would begin affecting bird species (e.g. eared grebe and California gulls) that rely on them. However, in 1994, the State Water Board set a lake level of 6392 feet, required permanent streamflows for Mono Basin streams, and ordered DWP to restore streams. 
+
+

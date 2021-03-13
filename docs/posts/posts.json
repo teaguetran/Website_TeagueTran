@@ -12,6 +12,18 @@
     "input_file": "lotr.utf8.md"
   },
   {
+    "path": "posts/2021-03-12-monolake/",
+    "title": "Water Levels in Mono Lake from 1850 - 2017",
+    "description": "Here we take a look at the lake levels of Monolake from 1850 to 2017. Due to major changes by the Los Angeles Department of Water and Power, lake levels drastically decreased, which led to land bridge formations and increased water salinity.",
+    "author": [],
+    "date": "2021-03-12",
+    "categories": [],
+    "contents": "\r\n\r\nShow code\r\n#select data to use in figure\r\n\r\nlake_levels_fig <- lake_level_more_tidy %>% \r\n  select(\"year\", \"lake_level_asl\",\"stable_level\") \r\n  #make new data that includes data as numeric rather than characters\r\n  \r\nlake_levels_fig <- lake_levels_fig %>% \r\n  mutate(lake_levels_num = as.numeric(lake_levels_fig$lake_level_asl)) %>%\r\n  mutate(year_new = as.numeric(lake_levels_fig$year))\r\n\r\n#create figure using lake_levels_fig\r\nmono_lake_plot <- \r\n  ggplot(data = lake_levels_fig, aes(x = year_new, y = lake_levels_num)) + \r\n  scale_y_continuous(breaks = pretty_breaks(n=6)) +\r\n  coord_cartesian(ylim = c(6340, 6430))+\r\n  geom_line(size = 1.2, color = \"darkgreen\") +\r\n  labs(y = \"Lake Level (ft above sea level)\", x = \"Year\", title = \"Mono Lake Water Levels (1850-2017)\") +\r\n  annotate(geom = \"point\", x = 1994, y = 6374.6, shape = 16, size = 2, color = \"red\") +\r\n  annotate(geom = \"point\", x = 1941, y = 6417, shape = 16, size = 2, color = \"red\") +\r\n  geom_label(label = \"1994: State Waterboard Decision 1631\", x = 1970, y = 6368, color = \"black\", size = 2.175) +\r\n  geom_label(label = \"1941: Los Angeles Department of Water & Power (DWP)\", x = 1980, y = 6423, color = \"black\", size = 2.175) + geom_label(label = \"Decrease in availability of brine shrimp\", x = 1868, y = 6356, color = \"black\", size = 2.175)+\r\n  geom_label(label = \"Land bridge forms\", x = 1855, y = 6373, color = \"black\", size = 2.175)+\r\n  geom_hline(aes(yintercept=6360), color = \"lightcyan4\", size = 1) +\r\n  geom_hline(aes(yintercept=6377), color = \"goldenrod3\", size = 1) + \r\n  theme_minimal()\r\n\r\nmono_lake_plot\r\n\r\n\r\n\r\n\r\nMono Lake water levels started drastically decreasing after the Los Angeles Department of Water and Power (DWP) started diverting water in 1941. When the water level reaches 6377 ft (above sea level), land bridges begin to form between the mainland and islands (gold line), allowing predators to access major bird nesting sites. If water levels fall to a lake level of 6360 ft (grey line), the salinity of the water becomes so high that brine shrimp populations decrease; this decrease would begin affecting bird species (e.g. eared grebe and California gulls) that rely on them. However, in 1994, the State Water Board set a lake level of 6392 feet, required permanent streamflows for Mono Basin streams, and ordered DWP to restore streams.\r\n\r\n\r\n\r\n",
+    "preview": "posts/2021-03-12-monolake/monolake_files/figure-html5/unnamed-chunk-1-1.png",
+    "last_modified": "2021-03-12T17:02:14-08:00",
+    "input_file": "monolake.utf8.md"
+  },
+  {
     "path": "posts/2021-02-24-heat-map-of-california-oil-spills/",
     "title": "Heat Map of California Oil Spills",
     "description": "I determined the counties with the most oil spills using the California Department of Fish and Wildlife 2008 Oil Spill Incident Tracking and county maps from the Census Bureau.",
